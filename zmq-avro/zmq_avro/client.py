@@ -13,11 +13,11 @@ class Client(object):
     def send(msg):
         context = zmq.Context()
 
-        logger.info("Connecting to hello world server…")
+        logger.info("Connecting to hello world server")
         socket = context.socket(zmq.REQ)
         socket.connect("tcp://localhost:5555")
 
-        logger.info("Sending request %s …" % msg)
+        logger.info("Sending request %s " % msg)
         socket.send(msg)
 
         # Get the reply.

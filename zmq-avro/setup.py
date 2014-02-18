@@ -27,40 +27,29 @@ for m in ('multiprocessing', 'billiard'):
         pass
 
 
-class test(TestCommand):
-    user_options = TestCommand.user_options + [
-        ('with-xunit', None, "Enable xunit"),
-        ('xunit-file=', None, "Xunit file"),
-    ]
-
-    def initialize_options(self):
-        TestCommand.initialize_options(self)
-        self.with_xunit = False
-        self.xunit_file = ''
-
-
 tests_require = [
 ]
 
 
 install_requires = [
+    'PyZMQ',
+    'avro',
 ]
 
-version = __import__('server').get_version()
+version = __import__('zmq_avro').get_version()
 
 setup(
     name='zmq-avro',
     version=version,
     author='Tomas Krajca',
-    author_email=('tomas.krajca@dpaw.wa.gov.au',),
+    author_email=('t.l.krajca@gmail.com',),
     url='https://github.com/tkrajca/projects/zmq-avro/',
     description=('TODO'),
     packages=find_packages(),
     zip_safe=False,
     install_requires=install_requires,
     tests_require=tests_require,
-    test_suite='swingers.tests.runtests.runtests',
-    cmdclass={'test': test},
+    test_suite='tests',
     license='BSD-3-Clause',
     include_package_data=True,
     keywords="TODO",
