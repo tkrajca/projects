@@ -51,6 +51,7 @@ setup(
     tests_require=tests_require,
     test_suite='tests',
     license='BSD-3-Clause',
+    scripts=['zmq_avro/client.py', 'zmq_avro/server.py'],
     include_package_data=True,
     keywords="TODO",
     classifiers=[
