@@ -43,13 +43,17 @@ Installation
 1. To develop:
 
     $ git clone https://github.com/tkrajca/projects/
+
     $ cd projects/zmq-avro
+
     $ python setup.py develop
 
 2. Standalone install:
 
     $ git clone https://github.com/tkrajca/projects/
+
     $ cd projects/zmq-avro
+
     $ python setup.py install
 
 Usage
@@ -58,17 +62,25 @@ Usage
 1. Ipython shell
     
     In [1]: from zmq-avro import client, server
+
     In [2]: import json
+
 
     In [3]: server.run('localhost:12345')
 
+
     In [4]: key = 'tomas'
+
     In [5]: secret = '123456789'
 
+
     In [6]: message = {'name': 'Tomas Krajca', 'email': 'my@example.com'}
+
     In [7]: client.send(json.dumps(message), key, secret)
 
+
     In [8]: message = {'name': 'Another name', 'email': 'another@example.com'}
+
     In [9]: client.send(json.dumps(message), key, secret)
 
 2. Linux shell
