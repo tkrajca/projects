@@ -1,0 +1,6 @@
+include ../AUTHORS README.rst ../LICENSE
+
+recursive-include client *
+recursive-include server *
+
+recursive-exclude * *.py[co]
