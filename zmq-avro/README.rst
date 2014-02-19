@@ -82,7 +82,7 @@ Usage
 
     $ server.py 127.0.0.1:12345
 
-and::
+   and::
 
     $ client.py 127.0.0.1:12345 < example.json
 
