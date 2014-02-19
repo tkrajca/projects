@@ -19,7 +19,7 @@ class TestZMQAvro(unittest.TestCase):
         self.server.close()
 
     def test_send_message(self):
-        # make sure server receives whatever json client sends
+        # make sure the server receives whatever client sends (in json)
         # make sure non-json messages or json messages with incorrect scheme
         # are handled properly
         self.assertIsNone(self.server._last_msg)

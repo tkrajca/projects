@@ -1,0 +1,11 @@
+{"namespace": "example.avro",
+    "type": "record",
+    "name": "Data",
+    "fields": [
+        {"name": "timestamp", "type": "int"},
+        {"name": "indicator",  "type": "string"},
+        {"name": "value", "type": ["float", "null"]},
+        {"name": "signature", "type": "string"},
+        {"name": "issuedAt", "type": "int"}
+    ]
+}

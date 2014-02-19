@@ -3,8 +3,21 @@
 import sys
 import logging
 import zmq
+import time
+import StringIO
+import os
+
+import avro.schema
+from avro.datafile import DataFileWriter
+from avro.io import DatumWriter
+
+from contextlib import closing
+
+from zmq_avro.utils import sign
+from zmq_avro.models import KEY, SECRET
 
 
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('zmq_avro.client')
 
 
@@ -17,20 +30,32 @@ class Client(object):
         logger.info("Connecting to {0}:{1}".format(self.host, self.port))
         # let's keep a persistent connection for each client
         self.socket.connect("tcp://{0}:{1}".format(self.host, self.port))
-        # TODO: close this connection at the end
+        self.schema = avro.schema.parse(open(os.path.join(
+            os.path.dirname(__file__), "example.avsc")).read())
 
-    def send(self, msg):
-        print("Sending message %s " % msg)
-        logger.info("Sending message %s " % msg)
-        self.socket.send(msg)
+    def send(self, msg, key, secret):
+        assert isinstance(msg, dict)    # must be dict in the correct format
+
+        logger.info("Sending message {0}".format(msg))
+        msg2 = msg.copy()
+        # just to make guessing a bit harder :)
+        msg2['issuedAt'] = int(time.time())
+        msg2['signature'] = sign(key, secret, **msg2)
+        output = StringIO.StringIO()
+        with closing(DataFileWriter(output, DatumWriter(),
+                                    self.schema)) as writer:
+            writer.append(msg2)
+            writer.flush()
+            output.seek(0)
+            self.socket.send(output.read())
 
         # Get the reply.
         reply = self.socket.recv()
-        print("Received reply %s " % reply)
-        logger.info("Received reply %s " % reply)
+        logger.info("Received reply {0}".format(reply))
 
     def close(self):
         self.context.destroy()
+        self.socker.close()
 
 
 if __name__ == "__main__":
@@ -40,5 +65,11 @@ if __name__ == "__main__":
 
     client = Client(host, port)
 
-    client.send('bla')
-    client.send('blabla')
+    msg = {
+        'timestamp': int(time.time()),
+        'indicator': 'power'
+    }
+    client.send(msg, KEY, SECRET)
+
+    msg['value'] = 5.3
+    client.send(msg, KEY, SECRET)

@@ -34,6 +34,7 @@ tests_require = [
 install_requires = [
     'PyZMQ',
     'avro',
+    'sqlalchemy',
 ]
 
 version = __import__('zmq_avro').get_version()
