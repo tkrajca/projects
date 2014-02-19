@@ -16,7 +16,7 @@ The client reads `json` data, serializes it into `avro` and sends it over
 `ZeroMQ` to the server.
 
 The server reads `avro`-serialized data from ZeroMQ, logs the action into
-`sqlite3` database and prints the original `json` data out (given the message
+`sqlite3` database and logs the original `json` data (given the message
 passes authentication test).
 
 The authentication is based on the `Amazon's S3 authentication`_ scheme. The
@@ -36,6 +36,7 @@ Requirements
 - Tested on Python 2.7
 - ZeroMQ
 - Avro
+- SqlAlchemy
 
 Installation
 ------------
@@ -55,33 +56,35 @@ Installation
 Usage
 -----
 
-1. Ipython shell::
+1. Ipython shell
     
-    In [1]: from zmq-avro import client, server
-    In [2]: import json
+   server::
 
-    In [3]: server.run('localhost:12345')
+        In [1]: from zmq_avro.server import Server
 
-    In [4]: key = 'tomas'
-    In [5]: secret = '123456789'
+        In [2]: server = Server('127.0.0.1', '12345')
+        In [3]: server.run()
 
-    In [6]: message = {'name': 'Tomas Krajca', 'email': 'my@example.com'}
-    In [7]: client.send(json.dumps(message), key, secret)
+   client::
 
-    In [8]: message = {'name': 'Another name', 'email': 'another@example.com'}
-    In [9]: client.send(json.dumps(message), key, secret)
+        In [1]: from zmq_avro.client import Client
+        In [2]: from zmq_avro import models
+        In [3]: import time
+
+        In [4]: client = Client('127.0.0.1', '12345')
+        In [5]: message = {'indicator': 'power', 'timestamp': int(time.time())}
+        In [6]: client.send(message, models.KEY, models.SECRET)
+
+        In [7]: message = {'name': 'Another name', 'email': 'another@example.com'}
+        In [8]: client.send(json.dumps(message), key, secret)
 
 2. Linux shell::
 
-    $ server.py localhost:12345
+    $ server.py 127.0.0.1:12345
 
 and::
 
-    $ client.py localhost:12345 message.json
-
-or::
-    
-    $ client.py localhost:12345 < message.json
+    $ client.py 127.0.0.1:12345 < example.json
 
 
 Tests

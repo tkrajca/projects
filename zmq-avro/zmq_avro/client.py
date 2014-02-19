@@ -55,7 +55,6 @@ class Client(object):
 
     def close(self):
         self.context.destroy()
-        self.socker.close()
 
 
 if __name__ == "__main__":

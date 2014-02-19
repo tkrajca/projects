@@ -2,6 +2,7 @@ from sqlalchemy import (Column, Integer, String, DateTime, ForeignKey,
                         create_engine)
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.pool import StaticPool
 
 import datetime
 
@@ -30,7 +31,8 @@ class Audit(Base):
 
 def init_db():
     # TODO: should probably make sure the database is only initialized once
-    db = create_engine('sqlite://')     # in memory
+    db = create_engine('sqlite://', connect_args={'check_same_thread': False},
+                       poolclass=StaticPool)     # in memory
     Base.metadata.create_all(db)
     Session = sessionmaker(bind=db)
     return db, Session
