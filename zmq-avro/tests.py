@@ -32,6 +32,9 @@ class TestZMQAvro(unittest.TestCase):
         self.server.close()
 
     def _audit_log_length(self):
+        # give the server thread a chance to safely write to the sqlite db
+        # (avoid race conditions)
+        time.sleep(1)
         with closing(self.server.Session()) as session:
             count = len(session.query(models.Audit).all())
         return count
