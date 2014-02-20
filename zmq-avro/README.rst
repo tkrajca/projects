@@ -56,27 +56,24 @@ Installation
 Usage
 -----
 
-1. Ipython shell
+1. Ipython shell::
     
-   server::
-
-        In [1]: from zmq_avro.server import Server
-
-        In [2]: server = Server('127.0.0.1', '12345')
-        In [3]: server.run()
-
-   client::
-
-        In [1]: from zmq_avro.client import Client
+        In [1]: from zmq_avro.server import Server, Client
         In [2]: from zmq_avro import models
         In [3]: import time
 
-        In [4]: client = Client('127.0.0.1', '12345')
-        In [5]: message = {'indicator': 'power', 'timestamp': int(time.time())}
-        In [6]: client.send(message, models.KEY, models.SECRET)
+        In [4]: server = Server('127.0.0.1', '12345')
+        In [5]: server.start()
 
-        In [7]: message = {'name': 'Another name', 'email': 'another@example.com'}
-        In [8]: client.send(json.dumps(message), key, secret)
+        In [6]: client = Client('127.0.0.1', '12345')
+
+        In [7]: message = {'indicator': 'power', 'timestamp': int(time.time())}
+        In [8]: client.send(message, models.KEY, models.SECRET)
+
+        In [9]: message = {'name': 'Another name', 'email': 'another@example.com'}
+        In [10]: client.send(json.dumps(message), key, secret)
+
+        In [11]: server.close()
 
 2. Linux shell::
 
