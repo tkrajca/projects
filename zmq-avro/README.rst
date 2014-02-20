@@ -84,7 +84,7 @@ Usage
 
    and::
 
-    $ client.py 127.0.0.1:12345 < example.json
+    $ client.py 127.0.0.1:12345
 
 
 Tests
@@ -93,3 +93,10 @@ Tests
 ::
 
     $ python setup.py test
+
+TODO
+----
+
+Make the client read from stdin:::
+
+    $ client.py 127.0.0.1:12345 < example.json
